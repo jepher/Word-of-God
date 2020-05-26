@@ -1,103 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Word of God</title>
-	<script src="src/phaser.js"></script>
-</head>
-<body>
-    <!-- import js files -->
-    <script src="src/scenes/menu.js"></script>
-    <script src="src/scenes/help.js"></script>
-    <script src="src/scenes/level1.js"></script>
-    <script src="src/scenes/level2.js"></script>
-    <script src="src/scenes/hell.js"></script>
-    <script src="src/functions.js"></script>
-    <script src="src/entities/apostle.js"></script>
-    <script src="src/entities/disciple.js"></script>
-    <script src="src/entities/angel.js"></script>
-    <script src="src/entities/player.js"></script>
-    <script src="src/entities/thug.js"></script>
-    <script src="src/entities/thugLeader.js"></script>
-    <script src="src/entities/mercenary.js"></script>
-    <script src="src/entities/terminator.js"></script>
-    <script src="src/entities/demon.js"></script>
-    <script src="src/entities/puppet.js"></script>
-    <script src="src/entities/ghost.js"></script>    
-    <script src="src/entities/satan.js"></script>    
-    <script src="src/entities/reaper.js"></script>    
-    <script src="src/entities/lich.js"></script>    
+  <head>
+    <meta charset="UTF-8" />
+    <title>Word of God</title>
+    <script src="src/phaser.js"></script>
+    <script
+      src="https://kit.fontawesome.com/d85ed4e2f5.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      #device-warning {
+        display: inline-block;
+        font-size: 1.2rem;
+        padding: 1rem;
+        background: #deb743;
+        border-radius: 10px;
+      }
+      #device-warning i {
+        margin-right: 1rem;
+      }
+      #screen-container {
+        width: 100%;
+        height: 100vh;
+        background-color: #454545;
+      }
+      #phaser-app {
+        width: 960px;
+        height: 700px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="screen-container">
+      <div id="content">
+        <div id="device-warning">
+          <i class="fas fa-exclamation"></i>Mobile devices not supported
+        </div>
+        <div id="phaser-app">
+          <!-- import js files -->
+          <script src="src/scenes/menu.js"></script>
+          <script src="src/scenes/help.js"></script>
+          <script src="src/scenes/level1.js"></script>
+          <script src="src/scenes/level2.js"></script>
+          <script src="src/scenes/hell.js"></script>
+          <script src="src/functions.js"></script>
+          <script src="src/entities/apostle.js"></script>
+          <script src="src/entities/disciple.js"></script>
+          <script src="src/entities/angel.js"></script>
+          <script src="src/entities/player.js"></script>
+          <script src="src/entities/thug.js"></script>
+          <script src="src/entities/thugLeader.js"></script>
+          <script src="src/entities/mercenary.js"></script>
+          <script src="src/entities/terminator.js"></script>
+          <script src="src/entities/demon.js"></script>
+          <script src="src/entities/puppet.js"></script>
+          <script src="src/entities/ghost.js"></script>
+          <script src="src/entities/satan.js"></script>
+          <script src="src/entities/reaper.js"></script>
+          <script src="src/entities/lich.js"></script>
 
-    <script type="text/javascript">
-        var map;
-        var groundLayer, wallLayer, obstacleLayer, doorLayer, passableLayer, lavaLayer;
+          <script type="text/javascript">
+            var map;
+            var groundLayer,
+              wallLayer,
+              obstacleLayer,
+              doorLayer,
+              passableLayer,
+              lavaLayer;
 
-        var player;
-        var character = new character();
-		var cursors;
-        
-        var spell;
-        var spellActive;
-        var totalHealth;
-        var health;
-        var bloodParticle;
-        var starParticle;
-        var emitter;
+            var player;
+            var character = new character();
+            var cursors;
 
-        // projectiles
-        var graphics;
-        var BetweenPoints;
-        var SetToAngle;
-        var velocityFromRotation;
+            var spell;
+            var spellActive;
+            var totalHealth;
+            var health;
+            var bloodParticle;
+            var starParticle;
+            var emitter;
 
-        // depth sorting
-        var currentDepth;
-        var playerDepth;
-        var spawnDepth;
+            // projectiles
+            var graphics;
+            var BetweenPoints;
+            var SetToAngle;
+            var velocityFromRotation;
 
-        // audio
-        var bulletFX;
+            // depth sorting
+            var currentDepth;
+            var playerDepth;
+            var spawnDepth;
 
-        // teams
-        var enemies = [];
-        var disciples = [];
-        var backup = [];
+            // audio
+            var bulletFX;
 
-        // scene manager
-        var scenes = ['menu', 'help', 'level1', 'level2', 'hell'];
-        var currentScene = 0;
-        var changingMap = false;
+            // teams
+            var enemies = [];
+            var disciples = [];
+            var backup = [];
 
-        // game state
-        var paused;
-        var pausedText;
-        var gameOver;
-        var gameStatus;
+            // scene manager
+            var scenes = ["menu", "help", "level1", "level2", "hell"];
+            var currentScene = 0;
+            var changingMap = false;
 
-        // timer
-        var timerEvents = [];
+            // game state
+            var paused;
+            var pausedText;
+            var gameOver;
+            var gameStatus;
 
-        // key binds
-        var keyP;
-        var keyR;
+            // timer
+            var timerEvents = [];
 
-		var config = {
-			type : Phaser.AUTO,
-			width: 960,
-			height: 700,
-			physics:{
-				default: 'arcade',
-				arcade: {
-                    debug: false,
-                    overlapBias: 20,
-                    TILE_BIAS: 32
-				}
-			},
-            scene:[menuScene, helpScene, level1Scene, level2Scene, hellScene]
-		}
+            // key binds
+            var keyP;
+            var keyR;
 
-		var game = new Phaser.Game( config );
-	</script>	
-	
-</body>
+            const config = {
+              type: Phaser.AUTO,
+              width: 960,
+              height: 700,
+              parent: "phaser-app",
+              physics: {
+                default: "arcade",
+                arcade: {
+                  debug: false,
+                  overlapBias: 20,
+                  TILE_BIAS: 32,
+                },
+              },
+              scene: [
+                menuScene,
+                helpScene,
+                level1Scene,
+                level2Scene,
+                hellScene,
+              ],
+            };
+
+            var game = new Phaser.Game(config);
+          </script>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
